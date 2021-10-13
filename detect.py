@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 
 import datetime
+import re
 
 import json
 import cv2
@@ -295,7 +296,9 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
 
     #주영 json 형식으로 저장하기위해 추가한식
-    with open("log/image_log.json", "w", encoding="utf-8-sig") as json_file:
+    # print(source)
+    # print(re.)
+    with open(f"log/image_log.json", "w", encoding="utf-8-sig") as json_file:
         json.dump(data, json_file, ensure_ascii=False)
 
 

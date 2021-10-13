@@ -39,7 +39,7 @@ def Highlight(path):
  
             vid_writer.write(image)
         
-        if not ret: # 동영상 씉나면 닫겠다.
+        if not ret: # 동영상 끝나면 닫겠다.
             print(cap.get(1), type(cap.get(1)))
             break
 
