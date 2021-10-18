@@ -12,13 +12,17 @@ import time
 from pathlib import Path
 
 import datetime
-import re
+import os
 
 import json
 import cv2
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
+
+#주영
+from highlight import Highlight
+from json_move import move_dog
 
 FILE = Path(__file__).absolute()
 sys.path.append(FILE.parents[0].as_posix())  # add yolov5/ to path
@@ -35,7 +39,7 @@ from utils.torch_utils import select_device, load_classifier, time_sync
 def run(weights='yolov5s.pt',  # model.pt path(s)
         source='data/videos',  # file/dir/URL/glob, 0 for webcam
         imgsz=640,  # inference size (pixels)
-        conf_thres=0.40,  # confidence threshold
+        conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
@@ -195,9 +199,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                     "height":h
                 }
                 frame.append(asd)
-            
-          
-            
+               
         if exist_dog == True:
             total={
                 "frame":frame,
@@ -296,10 +298,18 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
 
     #주영 json 형식으로 저장하기위해 추가한식
-    # print(source)
-    # print(re.)
-    with open(f"log/image_log.json", "w", encoding="utf-8-sig") as json_file:
+    json_name = os.path.basename(source)
+    json_name = os.path.splitext(json_name)[0]
+
+    with open(f"log/{json_name}.json", "w", encoding="utf-8-sig") as json_file:
         json.dump(data, json_file, ensure_ascii=False)
+
+
+    result_name = f"{json_name}.mp4"
+    move_dog(json_name)
+    Highlight(path, result_name, json_name)
+
+
 
 
     print(f'Done. ({time.time() - t0:.3f}s)')
@@ -339,11 +349,8 @@ def parse_opt():
 
 def main(opt):
     print(colorstr('detect: ') + ', '.join(f'{k}={v}' for k, v in vars(opt).items()))
-    print("확인 1번")
     check_requirements(exclude=('tensorboard', 'thop'))
-    print("확인 2번")
     run(**vars(opt))
-    print("확인 3번")
 
 
 
