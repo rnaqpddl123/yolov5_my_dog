@@ -29,7 +29,8 @@ def move_dog(json_name):
                 
                 compare_move = pow(move_x,2) + pow(move_y,2)
                 # 몇프레임동안 얼마의거리 움직였는지 = distance
-                distance = (math.sqrt(compare_move))/(i["frame_no"]-pre_no)
+                if i["frame_no"] != pre_no:
+                    distance = (math.sqrt(compare_move))/(i["frame_no"]-pre_no)
 
                 pre_x = j["center_x"]
                 pre_y = j["center_y"]
@@ -46,8 +47,7 @@ def move_dog(json_name):
                         "frame_no" : i["frame_no"]
                     }
                     hl_dis.append(asdf)
-                    
-             
+       
         else:
             pass
     
@@ -62,7 +62,7 @@ def move_dog(json_name):
             for j in pass_dis:
                 if len(pass_dis) == 2: 
                     break
-                elif abs(j-a) > 50: # 이곳에 flag(True나 False쓰는법)
+                elif abs(j-a) > 100: # 이곳에 flag(True나 False쓰는법)
                     pass_dis.append(a)
     # print(pass_dis,type(pass_dis))
     # print(hl_dis)
