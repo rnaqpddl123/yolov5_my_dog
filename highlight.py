@@ -58,7 +58,7 @@ def Highlight(path='data/videos/dog_sample.mp4',
             # cv2.imshow(path, image) # 동영상 확인용
             # cv2.waitKey(delay)
             
-            if cap.get(1) > hl_dis[i] and cap.get(1) < hl_dis[i]+100:
+            if cap.get(1) > hl_dis[i] and cap.get(1) < hl_dis[i]+1000:
                 
     
                 vid_writer.write(image)

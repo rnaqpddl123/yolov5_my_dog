@@ -13,10 +13,9 @@ def move_dog(json_name):
     pre_y = 0
     pre_no = 0
 
-    standard = 5
-    outlier = 50
+    standard = 2
+    outlier = 20
     
-    count = 0
     hl_dis = []
 
     for i in json_data["frames"] :
@@ -53,6 +52,7 @@ def move_dog(json_name):
     
     hl_dis = sorted(hl_dis, key=lambda x:x['이동거리'], reverse=True)
     pass_dis = []
+    
     for i in hl_dis:
         a = i["frame_no"]
         
@@ -62,10 +62,10 @@ def move_dog(json_name):
             for j in pass_dis:
                 if len(pass_dis) == 2: 
                     break
-                elif abs(j-a) > 100: # 이곳에 flag(True나 False쓰는법)
+                elif abs(j-a) > 1000: # 이곳에 flag(True나 False쓰는법)
                     pass_dis.append(a)
-    # print(pass_dis,type(pass_dis))
-    # print(hl_dis)
+    print(pass_dis,type(pass_dis))
+    print(hl_dis)
 
     return pass_dis
 
