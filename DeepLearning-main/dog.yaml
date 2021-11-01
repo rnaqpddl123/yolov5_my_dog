@@ -1,0 +1,5 @@
+train : C:\202105_lab\DogProject\yolov5\dog\train
+val : C:\202105_lab\DogProject\yolov5\dog\train
+
+nc: 1
+names = ['dog']
