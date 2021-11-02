@@ -3,8 +3,10 @@ import cv2
 import json
 import argparse
 import os
+from pathlib import Path
 
 from json_move import move_dog
+from utils.general import increment_path
 
 
 import torch
@@ -19,17 +21,24 @@ import torch
 
 
 @torch.no_grad()
-def Highlight(path='data/videos/dog_sample.mp4',
-            result_name='frame.mp4',
-            json_name="dog_sample"
+def Highlight(path,
+            result_name,
+            json_name,
+            save_dir
             ):
+    exist_ok = False
+    save_txt = False
+    Highlight = "runs/highlight"
+    name = "highlight"
     
-    hl_dis = move_dog(json_name)
+    save_dir_highlight = increment_path(Path(Highlight) / name, exist_ok=exist_ok)  # increment run
+    (save_dir_highlight / 'labels' if save_txt else save_dir_highlight).mkdir(parents=True, exist_ok=True)  # make dir
+
+
+    hl_dis = move_dog(json_name,save_dir)
     print(hl_dis)
 
     for i in range(len(hl_dis)):
-        result_path = 'data/result/' + result_name
-
         try:
             # mp4파일일경우
             codec=cv2.VideoWriter_fourcc(*'MP4V')
@@ -49,7 +58,7 @@ def Highlight(path='data/videos/dog_sample.mp4',
         print('총 Frame 갯수:', frame_cnt, 'FPS:', round(fps), 'Frame 크기:', size)
             
         result_name = os.path.splitext(result_name)[0]
-        result_path = f"data/result/{result_name}_{i}.mp4"
+        result_path = f"{save_dir_highlight}/{result_name}_{i}.mp4"
         vid_writer = cv2.VideoWriter(result_path, codec, fps, size)
 
 
@@ -68,20 +77,20 @@ def Highlight(path='data/videos/dog_sample.mp4',
                 break
 
 
-def parse_opt():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--path', type=str, default='data/videos/dog_sample.mp4', help='load results to project/name')
-    parser.add_argument('--result_name', default='frame.mp4', help='save results to project/name')
-    opt = parser.parse_args()
-    print(opt)
-    return opt
+# def parse_opt():
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('--path', type=str, default='data/videos/dog_sample.mp4', help='load results to project/name')
+#     parser.add_argument('--result_name', default='frame.mp4', help='save results to project/name')
+#     opt = parser.parse_args()
+#     print(opt)
+#     return opt
 
-def main(opt):
-    Highlight(**vars(opt))
+# def main(opt):
+#     Highlight(**vars(opt))
 
 
-if __name__ == '__main__':
-    opt = parse_opt()
-    main(opt)
+# if __name__ == '__main__':
+#     opt = parse_opt()
+#     main(opt)
 
     

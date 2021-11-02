@@ -3,8 +3,8 @@ import math
 import numpy as np
 
 
-def move_dog(json_name):
-    with open(f'log/{json_name}.json', 'r', encoding='UTF-8-sig') as f:
+def move_dog(json_name, save_dir):
+    with open(f'{save_dir}/{json_name}.json', 'r', encoding='UTF-8-sig') as f:
         json_data = json.load(f)
 
     # pre_x = json_data["frames"][0]["frame"][0]["center_x"]
