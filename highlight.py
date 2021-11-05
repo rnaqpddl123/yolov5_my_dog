@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 
 from json_move import move_dog
-from utils.general import increment_path
+from utils.general import create_dir
 
 
 import torch
@@ -24,21 +24,18 @@ import torch
 def Highlight(path,
             result_name,
             json_name,
-            save_dir
+            json_dir
             ):
     exist_ok = False
     save_txt = False
     Highlight = "runs/highlight"
     name = "highlight"
     
-    save_dir_highlight = increment_path(Path(Highlight) / name, exist_ok=exist_ok)  # increment run
-    (save_dir_highlight / 'labels' if save_txt else save_dir_highlight).mkdir(parents=True, exist_ok=True)  # make dir
+    create_dir(Highlight)
+    
+    HL_frame = move_dog(json_name,json_dir)
 
-
-    hl_dis = move_dog(json_name,save_dir)
-    print(hl_dis)
-
-    for i in range(len(hl_dis)):
+    for i in range(len(HL_frame)):
         try:
             # mp4파일일경우
             codec=cv2.VideoWriter_fourcc(*'MP4V')
@@ -58,7 +55,7 @@ def Highlight(path,
         print('총 Frame 갯수:', frame_cnt, 'FPS:', round(fps), 'Frame 크기:', size)
             
         result_name = os.path.splitext(result_name)[0]
-        result_path = f"{save_dir_highlight}/{result_name}_{i}.mp4"
+        result_path = f"{Highlight}/{result_name}_{i}.mp4"
         vid_writer = cv2.VideoWriter(result_path, codec, fps, size)
 
 
@@ -67,7 +64,7 @@ def Highlight(path,
             # cv2.imshow(path, image) # 동영상 확인용
             # cv2.waitKey(delay)
             
-            if cap.get(1) > hl_dis[i] and cap.get(1) < hl_dis[i]+100:
+            if cap.get(1) > (HL_frame[i]*60) and cap.get(1) < (HL_frame[i]*60)+1000:
                 
     
                 vid_writer.write(image)
