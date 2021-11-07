@@ -11,25 +11,13 @@ from utils.general import create_dir
 
 import torch
 
-# def section():
-#     with open("log/dog_vidio-1.json", "r") as f:
-#         json_data = json.load(f)
-#     print(json.dumps(json_data))
-
-
-
-
-
 @torch.no_grad()
 def Highlight(path,
             result_name,
             json_name,
             json_dir
             ):
-    exist_ok = False
-    save_txt = False
-    Highlight = "runs/highlight"
-    name = "highlight"
+    Highlight = "../Frontend-main/webapp/static/runs/highlight"
     
     create_dir(Highlight)
     
@@ -56,7 +44,10 @@ def Highlight(path,
             
         result_name = os.path.splitext(result_name)[0]
         result_path = f"{Highlight}/{result_name}_{i}.mp4"
-        vid_writer = cv2.VideoWriter(result_path, codec, fps, size)
+        
+        # 해당 코덱을 사용하기위해서 https://github.com/cisco/openh264/releases 맞는 버전을 확인해서 C:\Users\Playdata\Anaconda3에 집어넣었다
+        codec_writer = cv2.VideoWriter_fourcc(*'avc1')
+        vid_writer = cv2.VideoWriter(result_path, codec_writer, fps, size)
 
 
         while(cap.isOpened()):
@@ -64,7 +55,7 @@ def Highlight(path,
             # cv2.imshow(path, image) # 동영상 확인용
             # cv2.waitKey(delay)
             
-            if cap.get(1) > (HL_frame[i]*60) and cap.get(1) < (HL_frame[i]*60)+1000:
+            if cap.get(1) > (HL_frame[i]*60) and cap.get(1) < (HL_frame[i]*60)+1800:
                 
     
                 vid_writer.write(image)
@@ -72,22 +63,3 @@ def Highlight(path,
             if not ret: # 동영상 끝나면 닫겠다.
                 print(cap.get(1), type(cap.get(1)), result_path)
                 break
-
-
-# def parse_opt():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--path', type=str, default='data/videos/dog_sample.mp4', help='load results to project/name')
-#     parser.add_argument('--result_name', default='frame.mp4', help='save results to project/name')
-#     opt = parser.parse_args()
-#     print(opt)
-#     return opt
-
-# def main(opt):
-#     Highlight(**vars(opt))
-
-
-# if __name__ == '__main__':
-#     opt = parse_opt()
-#     main(opt)
-
-    
